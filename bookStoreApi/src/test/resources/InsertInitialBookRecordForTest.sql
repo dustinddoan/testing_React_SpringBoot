@@ -1,0 +1,1 @@
+insert into book(id, title, description, release_year) values ('6e9251ec-e1ff-4c7c-a6f5-1838a553254b', 'test title', 'The Japanese secret to long and happy life', 2018)
