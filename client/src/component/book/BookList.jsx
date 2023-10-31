@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { Box } from "@mui/material";
 import useStyles from "./BookStyle";
+import BookListItem from "./BookListItem";
 
 const bookShape = {
     id: PropTypes.string.isRequired,
@@ -15,23 +16,13 @@ const propTypes = {
 };
 
 const BookList = ({ books }) => {
-    // books = [
-    //     {
-    //         id: "1",
-    //         title: "Test Book",
-    //         description: "Test description",
-    //         releaseYear: 2021,
-    //     },
-    // ];
-    // console.log("BOOKS: ", books)
-
     const classes = useStyles();
     
     return (
-        <Box className={classes.bookList}>
+        <Box className={classes.bookList} ml={5}>
             {books && Array.isArray(books) ?
                 books.map((book) =>
-                    <div key={book.id}>{book.id}</div>
+                    <BookListItem key={ book.id } book={book} />
                 )
                 : (<div>waiting...</div>)
             }
