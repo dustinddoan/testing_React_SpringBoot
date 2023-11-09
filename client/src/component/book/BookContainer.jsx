@@ -1,43 +1,37 @@
-import { Box } from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 import React, { useEffect } from "react";
 
 import BookFilter from "./BookFilter";
 import useStyles from "./BookStyle";
 import BookList from "./BookList";
-import { useDispatch, useSelector } from "react-redux";
-
-import { selectBooks, getBooksAction, selecteBookStatus } from "../../module/book/bookSlice";
-import { useAppDispatch, useAppSelector } from "../../util/hook";
+import {useAppDispatch, useAppSelector} from '../../util/hook'
+import { getBooks } from "../../module/book/bookSlice";
 
 const BookContainer = () => {
-    // const dispatch = useDispatch();
-    // const books = useSelector(selectBooks);
-    // const booksStatus = useSelector(selecteBookStatus);
+
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(getBooksAction());
+        dispatch(getBooks());
     }, [dispatch]);
 
 
-    const books = useAppSelector(selectBooks);
-    const booksStatus = useAppSelector(selecteBookStatus);
+    const { books, requestStatus } = useAppSelector(state => state.bookReducer);
 
-    
-
-    // useSelector(state => {
-    //     console.log("state: ", state)
-    // })
-
+  
 
     // console.log("BOOKS: ", books)
+    // console.log("BOOKS STATUS: ", requestStatus)
+   
 
     const classes = useStyles();
     return (
         <Box className={classes.bookContainer}>
             <BookFilter />
             <Box className={classes.bookList}>
-                <BookList books={books}/>
+                {requestStatus === 'loading' && <Skeleton data-testid="book-loader"/>}
+                {requestStatus === 'failed' && (<div data-testid="book-error-message">Error fetching data</div>)}
+                {requestStatus === 'succeeded' && <BookList data-testid="book-list" books={books} />}
             </Box>
         </Box>
     )

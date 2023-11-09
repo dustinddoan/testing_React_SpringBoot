@@ -2,15 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './component/App';
 import { Provider } from 'react-redux'
-import { configureStore } from '@reduxjs/toolkit'
+import setupStore from './util/store';
 
+const store = setupStore();
 
-import { rootReducer } from './module/store';
-
-const store = configureStore({
-  reducer: rootReducer
-})
-
+// console.log("STORE index: ", store.getState())
 
 ReactDOM.render(
   <React.StrictMode>

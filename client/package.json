@@ -59,7 +59,8 @@
   "devDependencies": {
     "@babel/core": "^7.23.2",
     "@babel/node": "^7.22.19",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "redux-devtools-extension": "^2.13.9"
   },
   "jest": {
     "resetMocks": false

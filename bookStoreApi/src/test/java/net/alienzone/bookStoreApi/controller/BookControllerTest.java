@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,6 +35,20 @@ public class BookControllerTest {
         when(bookService.getBooks()).thenReturn(bookDtoList);
 
         ResponseEntity<List<BookDto>> bookDtoResponse = bookController.getBooks();
+
+        assertThat(bookDtoResponse.getBody()).isNotNull();
+        assertThat(bookDtoResponse.getBody().size()).isEqualTo(1);
+
+
+    } @Test
+    void shouldReturnBookDtoListWhenGetBookByTitleCall() {
+        List<BookDto> bookDtoList = new ArrayList<BookDto>();
+        BookDto bookDto = getBookDto();
+        bookDtoList.add(bookDto);
+
+        when(bookService.getBooksByTitle(anyString())).thenReturn(bookDtoList);
+
+        ResponseEntity<List<BookDto>> bookDtoResponse = bookController.getBooksByTitle("test_title");
 
         assertThat(bookDtoResponse.getBody()).isNotNull();
         assertThat(bookDtoResponse.getBody().size()).isEqualTo(1);

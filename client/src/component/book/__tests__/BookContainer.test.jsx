@@ -2,102 +2,133 @@ import React from "react";
 import BookContainer from "../BookContainer";
 import renderWithRedux from "../../../util/testUtil";
 import BookList from "../BookList";
-import bookSlice, { getBooksAction } from "../../../module/book/bookSlice";
-import { getByTestId, screen } from "@testing-library/react";
-import configureStore from 'redux-mock-store';
+import bookReducer, {
+  getBooksAction,
+  INITIAL_BOOK_REDUCER_STATE,
+} from "../../../module/book/bookSlice";
+import setupStore from "../../../util/store";
 import axios from "axios";
-import { rootReducer } from "../../../module/store";
-import reduxThunk from 'redux-thunk'
+import reduxThunk from "redux-thunk";
+import configureStore from "redux-mock-store";
+import { screen, render } from "@testing-library/react";
+import { getBooks } from "../../../module/book/bookSlice";
+import { Provider } from "react-redux";
 
 
-// import { http, HttpResponse } from 'msw'
-// import { setupServer } from 'msw/node'
-// import { render, screen, waitFor } from '@testing-library/react'
-
-// import baseUrl from "../../../config"
-// import { TextEncoder, TextDecoder } from 'text-encoding';
-
-// global.TextEncoder = TextEncoder;
-// global.TextDecoder = TextDecoder;
-
-jest.mock("../BookList", () => {
-  return jest.fn(() => <div>mockcomponent</div>);
-});
-
-jest.mock('axios');
+jest.mock("axios");
 const middleware = [reduxThunk];
+
+jest.mock("../BookList", () => ({
+  __esModule: true,
+  default: jest.fn(() => null),
+}));
+
+
+
+
+const books = [
+  {
+    id: "1",
+    title: "Test Book 1",
+    description: "Test description",
+    releaseYear: 2021,
+  },
+];
+
+
+
 const mockStore = configureStore(middleware);
 
+// console.log("STORE TEST: ", store.getState())
+describe("BookContainer", () => {
+  beforeEach(() => {
+    jest.resetModules();
+  });
 
 
-
-
-
-describe('BookContainer', () => {
-
-  it('should reder without error', async () => {
-    const books = [
-      {
-        id: "1",
-        title: "Test Book",
-        description: "Test description",
-        releaseYear: 2021,
-      },
-    ];
-
+  it('should render without error', () => {
     const preloadedState = {
       bookReducer: {
-        books,
-        requestStatus: {
-          isPending: false,
-          isFulfilled: false,
-          isReject: false
-        }  
-      },
-    };
-
-    const { container } = renderWithRedux(<BookContainer />, { preloadedState }, {});
-
-    expect(BookList).toHaveBeenCalled();
-    expect(BookList).toHaveBeenCalledWith({ books }, {});
-  })
-
-  it('should render with action type', async () => {
-    const store = mockStore({})
-    const mockData = [
-      {
-        books: [],
-        requestStatus: {
-          isPending: true,
-          isFulfilled: false,
-          isReject: false
-        }
+        books: [
+          {
+            id: '1',
+            title: 'Test Book 1',
+            description: 'Test description',
+            releaseYear: 2021,
+          },
+        ],
+        requestStatus: 'succeeded',
       }
-    ] 
+    }
 
-    axios.get.mockResolvedValue({
-      data: mockData
-    })
-
-    await store.dispatch(getBooksAction())
-
-    console.log("actions type: ", store.getActions())
-    console.log("actions payload: ", store.getActions())
-    console.log("state: ", store.getState())
-    
+    const store = mockStore(preloadedState);
 
 
+    BookList.mockImplementation(() => {
+      // console.log("STORE: ", store.getState())
+      const requestStatus = store.getState().bookReducer.requestStatus
+      return (requestStatus === 'succeeded') ?
+        (< div data-testid="book-list" books={books} > mockcomponent</div >)
+        :
+        <></>
 
-    
-    renderWithRedux(<BookContainer />, {});
+    });
 
-    // console.log("actions: ", actions)
+    renderWithRedux(<BookContainer />, { store })
+    // console.log("Received value:", BookList.mock.calls[0]);
 
-    expect(screen.getByTestId('book-loader')).toBeInTheDocument();
+    expect(screen.getByTestId("book-list")).toBeInTheDocument();
+
+
+    expect(BookList).toHaveBeenCalledWith(
+      {
+        books: [
+          {
+            id: '1',
+            title: 'Test Book 1',
+            description: 'Test description',
+            releaseYear: 2021,
+          },
+        ],
+        "data-testid": "book-list",
+      }, {}
+    );
 
 
 
   })
 
-})
+  it('should show error message if failed to fetch data', () => {
+    const preloadedState = {
+      bookReducer: {
+        books: [],
+        requestStatus: 'failed',
+        error: "Failed to get data"
+      }
+    }
+
+    const store = mockStore(preloadedState);
+
+
+    BookList.mockImplementation(() => {
+      // console.log("STORE: ", store.getState())
+      const requestStatus = store.getState().bookReducer.requestStatus
+      return (requestStatus === 'failed') ?
+        (<div data-testid="book-error-message">Error fetching data</div>)
+        :
+        <></>
+
+    });
+
+    renderWithRedux(<BookContainer />, { store })
+    // console.log("Received value:", BookList.mock.calls[0]);
+
+    expect(screen.getByTestId("book-error-message")).toBeInTheDocument();
+    expect(screen.getByText("Error fetching data")).toBeInTheDocument();
+  })
+
+
+});
+
+
 

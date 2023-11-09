@@ -1,28 +1,38 @@
-import bookReducer, {INITIAL_BOOK_REDUCER_STATE} from "../bookReducer";
+import bookReducer, { getBooks, INITIAL_BOOK_REDUCER_STATE } from "../bookSlice";
 
-describe('bookReducer', () => {
-    it('should return correct new state', () => {
+describe("bookReducer", () => {
+  it("should return correct new state", () => {
+    const mockData = [
+      {
+        id: 1,
+        title: "Test Book",
+        description: "Test description",
+        releaseYear: 2021,
+      },
+    ];
 
-        const mockData = [
-            {
-              id: 1,
-              title: 'Test Book',
-              description: 'Test description',
-              releaseYear: 2021,
-            }
-        ]
-        
+    const newState = bookReducer(
+      INITIAL_BOOK_REDUCER_STATE,
+      getBooks.fulfilled(mockData)
+    );
 
-        const mockAction = {
-            type: 'BOOK_LIST',
-            payload: mockData
-        }
+    // console.log("----DUSTIN newState: ", newState);
 
-        const newState = bookReducer(INITIAL_BOOK_REDUCER_STATE, mockAction);
-        // console.log("----DUSTIN: ", newState);
-        // console.log("----DUSTIN: ", mockData);
+    expect(newState.books).toEqual(mockData);
+    expect(newState.requestStatus).toEqual('succeeded');
+  });
 
-        expect(newState.books).toEqual(mockData);
 
-    });
+  it("should return handle reject state correctly", () => {
+
+    const newState = bookReducer(
+      INITIAL_BOOK_REDUCER_STATE,
+      getBooks.rejected(new Error())
+    );
+
+    // console.log("----DUSTIN newState: ", newState);
+
+    
+    expect(newState.requestStatus).toEqual('failed');
+  });
 });

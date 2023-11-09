@@ -15,7 +15,7 @@ const propTypes = {
     books: PropTypes.arrayOf(PropTypes.shape(bookShape)).isRequired
 };
 
-const BookList = ({ books }) => {
+const BookList = ({books}) => {
     const classes = useStyles();
     
     return (

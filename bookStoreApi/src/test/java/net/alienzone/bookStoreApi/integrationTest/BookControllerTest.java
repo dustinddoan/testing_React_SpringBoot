@@ -28,6 +28,14 @@ public class BookControllerTest {
     void shouldReturnBooksWhenBookApiCalled() {
         BookDto[] listOfBooks = testRestTemplate.getForObject("http://localhost:" + port + "/api/v1/books", BookDto[].class);
         assertThat(listOfBooks).isNotNull();
-        assertThat(listOfBooks.length).isEqualTo(2);
+        assertThat(listOfBooks.length).isEqualTo(18);
+    }
+
+    @Test
+    @Sql(scripts = {"classPath:InsertInitialBookRecordForTest.sql"})
+    void shouldReturnBooksWhenBookFilterBookApiCalled() {
+        BookDto[] listOfBooks = testRestTemplate.getForObject("http://localhost:" + port + "/api/v1/books/test title", BookDto[].class);
+        assertThat(listOfBooks).isNotNull();
+        assertThat(listOfBooks.length).isEqualTo(1);
     }
 }

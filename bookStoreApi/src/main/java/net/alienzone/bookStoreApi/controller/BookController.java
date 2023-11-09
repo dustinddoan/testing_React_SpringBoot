@@ -6,11 +6,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.val;
 import net.alienzone.bookStoreApi.BookDto;
 import net.alienzone.bookStoreApi.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,5 +37,11 @@ public class BookController {
         List<BookDto> books = bookService.getBooks();
 
         return ResponseEntity.ok(books);
+    }
+
+    @GetMapping("/{title}")
+    public ResponseEntity<List<BookDto>> getBooksByTitle(@PathVariable String title) {
+        List<BookDto> booksByTitle = bookService.getBooksByTitle(title);
+        return ResponseEntity.ok(booksByTitle);
     }
 }
