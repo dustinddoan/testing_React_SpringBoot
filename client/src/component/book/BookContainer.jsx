@@ -16,7 +16,8 @@ const BookContainer = () => {
     }, [dispatch]);
 
 
-    const { books, requestStatus } = useAppSelector(state => state.bookReducer);
+    const books = useAppSelector(state => state.book.books)
+    const requestStatus = useAppSelector(state => state.book.requestStatus)
 
   
 

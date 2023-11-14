@@ -1,26 +1,27 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import bookReducer from "../module/book/bookSlice";
+import {combineReducers, configureStore} from "@reduxjs/toolkit";
+import thunk from "redux-thunk";
+import bookSlice from '../module/book/bookSlice';
 
-const rootReducer = combineReducers ({
-  bookReducer,
-});
+const rootReducer = combineReducers({
+  book: bookSlice
+})
 
-// const setupStore = (preloadedState) => {
-//   console.log("STORE PRELOADEDSTATE: ", preloadedState);
+// export function setupStore(preloadedState) {
 //   return configureStore({
 //     reducer: rootReducer,
-//     preloadedState,
-//   });
-// };
+//     preloadedState
+//   })
+// }
 
-// export default setupStore;
-export default function setupStore(preloadedState) {
-  // console.log("STORE PRELOADEDSTATE: ", preloadedState);
-  const storeTemp =  configureStore({
+
+
+const setupStore = preloadedState => {
+  console.log("rootreducer: ", rootReducer)
+  return configureStore({
     reducer: rootReducer,
-    preloadedState
-  })
-    // console.log("STORE configureStore: ", storeTemp.getState());
-
-  return storeTemp;
+    preloadedState,
+  });
 }
+
+
+export default setupStore;

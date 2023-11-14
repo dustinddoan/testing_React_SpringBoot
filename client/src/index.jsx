@@ -4,6 +4,9 @@ import App from './component/App';
 import { Provider } from 'react-redux'
 import setupStore from './util/store';
 
+
+
+
 const store = setupStore();
 
 // console.log("STORE index: ", store.getState())

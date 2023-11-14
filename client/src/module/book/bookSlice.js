@@ -28,45 +28,60 @@ export const getBooksByTitle = createAsyncThunk(
   }
 );
 
-export const INITIAL_BOOK_REDUCER_STATE = {
-  books: [],
-  requestStatus: 'uninitilaized',
-  error: null
-};
+// export const initialState = {
+//   books: [],
+//   requestStatus: 'uninitialized',
+//   error: null
+// };
 
 const bookSlice = createSlice({
-  name: "bookReducer",
-  initialState: INITIAL_BOOK_REDUCER_STATE,
+  name: "book",
+  initialState: {
+    books: [],
+    requestStatus: "uninitialized",
+    error: null,
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getBooks.pending, (state, action) => {
+      // console.lolg("State: ", state)
       state.requestStatus = "loading";
     });
 
     builder.addCase(getBooks.fulfilled, (state, action) => {
+      // console.log("state.books", state.books);
+      // console.log("state.books", action.payload);
       state.books = action.payload;
       state.requestStatus = "succeeded";
     });
+
     builder.addCase(getBooks.rejected, (state, action) => {
       state.requestStatus = "failed";
       state.error = action.error.message;
-  
     });
-    builder.addDefaultCase((state, action) => {
-      return state;
+    builder.addCase(getBooksByTitle.pending, (state, action) => {
+      state.requestStatus = "loading";
     });
+
+    builder.addCase(getBooksByTitle.fulfilled, (state, action) => {
+      state.books = action.payload;
+      state.requestStatus = "succeeded";
+    });
+    builder.addCase(getBooksByTitle.rejected, (state, action) => {
+      state.requestStatus = "failed";
+      state.error = action.error.message;
+    });
+    // builder.addDefaultCase((state = initialState, action) => {
+    //   // console.log("STATE: ", state.books)
+    //   return state;
+    // });
   },
 });
 
 
-// export const selectBooks = (state) => {
-//   return state.bookReducer.books; // Return the selected data
-// };
-// export const selecteBookStatus = (state) => {
-//   return state.bookReducer.requestStatus;
-// };
-
-// export const { reducer, actions } = bookSlice;
+export const selectBooks = (state) => state.book.books;
+export const selecteRequestStatus = (state) => state.book.requestStatus;
 
 
+// export const {reducer: bookReducer, actions} = bookSlice
 export default bookSlice.reducer;

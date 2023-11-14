@@ -1,27 +1,44 @@
 import React from "react";
-import { fireEvent, screen } from "@testing-library/react";
 import BookFilter from "../BookFilter";
-import { getBooksByTitle } from "../../../module/book/bookSlice";
 import renderWithRedux from "../../../util/testUtil";
+import { fireEvent, screen } from "@testing-library/react";
+import { getBooksByTitle } from "../../../module/book/bookSlice";
+import setupStore from "../../../util/store";
+import thunk from "redux-thunk";
+import configureStore from "redux-mock-store";
+import axios from "axios";
 
-jest.mock("../../../module/book/bookSlice");
+const middleware = [thunk];
+const mockStore = configureStore(middleware);
+jest.mock("axios");
 
-describe('BookFilter', () => { 
-    it('should fire getBooksByTitle action on click Search button', () => {
-        renderWithRedux(<BookFilter />, {});
 
-        const textField = screen.getByLabelText("Enter book title");
 
-        fireEvent.change(
-            textField,
-            { target: { value: 'test title' } }
-        )
+jest.mock("../../../module/book/bookSlice")
+describe('BookFilter', () => {
+    it('should fire action', async () => {
+        const preloadedState = {
+            books: [],
+            requestStatus: 'uninitialized',
+            error: null
+        };
 
-        const searchButton = screen.getByText('search');
+        const store = mockStore(preloadedState)
 
+        renderWithRedux(<BookFilter />, { store })
+
+        getBooksByTitle.mockImplementation(() => (dispatch) => {})
+
+        const fieldText = screen.getByLabelText('Enter book title');
+        fireEvent.change(fieldText, { target: { value: 'test title' } })
+
+
+
+        const searchButton = screen.getByText('Search');
         fireEvent.click(searchButton);
 
-        expect(getBooksByTitle).toHaveBeenCalledWith('test title');
-        
+        expect(1).toEqual(1);
+        expect(getBooksByTitle).toHaveBeenCalledWith('test title')
     })
+    
 })

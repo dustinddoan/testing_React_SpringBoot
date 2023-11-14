@@ -48,7 +48,7 @@ describe("BookContainer", () => {
 
   it('should render without error', () => {
     const preloadedState = {
-      bookReducer: {
+      book: {
         books: [
           {
             id: '1',
@@ -66,7 +66,7 @@ describe("BookContainer", () => {
 
     BookList.mockImplementation(() => {
       // console.log("STORE: ", store.getState())
-      const requestStatus = store.getState().bookReducer.requestStatus
+      const requestStatus = store.getState().book.requestStatus
       return (requestStatus === 'succeeded') ?
         (< div data-testid="book-list" books={books} > mockcomponent</div >)
         :
@@ -100,7 +100,7 @@ describe("BookContainer", () => {
 
   it('should show error message if failed to fetch data', () => {
     const preloadedState = {
-      bookReducer: {
+      book: {
         books: [],
         requestStatus: 'failed',
         error: "Failed to get data"
@@ -112,7 +112,7 @@ describe("BookContainer", () => {
 
     BookList.mockImplementation(() => {
       // console.log("STORE: ", store.getState())
-      const requestStatus = store.getState().bookReducer.requestStatus
+      const requestStatus = store.getState().book.requestStatus
       return (requestStatus === 'failed') ?
         (<div data-testid="book-error-message">Error fetching data</div>)
         :
