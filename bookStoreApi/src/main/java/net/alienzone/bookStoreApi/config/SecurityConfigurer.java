@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity
@@ -22,10 +23,12 @@ public class SecurityConfigurer {
 //    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailService userDetailService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtRequestFilter jwtRequestFilter;
 
-    public SecurityConfigurer(UserDetailService userDetailService, PasswordEncoder passwordEncoder) {
+    public SecurityConfigurer(UserDetailService userDetailService, PasswordEncoder passwordEncoder, JwtRequestFilter jwtRequestFilter) {
         this.userDetailService = userDetailService;
         this.passwordEncoder = passwordEncoder;
+        this.jwtRequestFilter = jwtRequestFilter;
     }
 
     @Bean
@@ -48,9 +51,10 @@ public class SecurityConfigurer {
                 .csrf( csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(new AntPathRequestMatcher("/api/v1/login")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/login")).permitAll()
                         .anyRequest().authenticated())
-                .authenticationProvider(authenticationProvider());
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // decode the token
         return http.build();
     }
 }
