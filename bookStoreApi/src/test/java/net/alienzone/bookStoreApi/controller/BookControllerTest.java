@@ -1,6 +1,6 @@
 package net.alienzone.bookStoreApi.controller;
 
-import net.alienzone.bookStoreApi.BookDto;
+import net.alienzone.bookStoreApi.dto.BookDto;
 import net.alienzone.bookStoreApi.services.BookService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,4 +1,4 @@
-package net.alienzone.bookStoreApi;
+package net.alienzone.bookStoreApi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

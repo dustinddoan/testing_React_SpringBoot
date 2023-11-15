@@ -1,6 +1,6 @@
 package net.alienzone.bookStoreApi.integrationTest;
 
-import net.alienzone.bookStoreApi.BookDto;
+import net.alienzone.bookStoreApi.dto.BookDto;
 import net.alienzone.bookStoreApi.BookStoreApiApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

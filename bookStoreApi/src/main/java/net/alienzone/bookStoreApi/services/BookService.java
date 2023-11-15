@@ -1,14 +1,12 @@
 package net.alienzone.bookStoreApi.services;
 
 import lombok.extern.log4j.Log4j2;
-import net.alienzone.bookStoreApi.BookDto;
+import net.alienzone.bookStoreApi.dto.BookDto;
 import net.alienzone.bookStoreApi.model.Book;
 import net.alienzone.bookStoreApi.repository.BookRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;

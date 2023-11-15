@@ -1,6 +1,6 @@
 package net.alienzone.bookStoreApi.services;
 
-import net.alienzone.bookStoreApi.BookDto;
+import net.alienzone.bookStoreApi.dto.BookDto;
 import net.alienzone.bookStoreApi.model.Book;
 import net.alienzone.bookStoreApi.repository.BookRepository;
 import org.junit.jupiter.api.Test;
@@ -9,10 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
