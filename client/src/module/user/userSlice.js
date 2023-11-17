@@ -41,7 +41,7 @@ const userSlice = createSlice({
    
 })
 
-export const getUserToken = (state) => state.user.token
-export const getLoginPromise = (state) => state.user.promise
+export const getUserToken = (state) => state.user
+export const getLoginPromise = (state) => state.user
 
 export default userSlice.reducer;

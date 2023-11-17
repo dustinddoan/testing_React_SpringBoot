@@ -31,7 +31,7 @@ describe("BookActions", () => {
 
     const actions = store.getActions();
 
-    // console.log("ACTIONS TEST: ", actions[1])
+    console.log("ACTIONS TEST: ", actions[1])
 
     expect(actions.length).toEqual(2);
 

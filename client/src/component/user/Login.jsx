@@ -25,19 +25,19 @@ const validationSchema = yup.object({
 const Login = () => {
     const classes = useStyles();
     const dispatch = useAppDispatch();
-    const userLoginPromise = useAppSelector(getLoginPromise);
-    console.log("status: ", userLoginPromise)
+    const user = useAppSelector(getLoginPromise);
+    // console.log("status: ", user)
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
     
     useEffect(() => {
-        if (userLoginPromise === 'failed') {
+        if (user != null && user.promise === 'failed') {
             enqueueSnackbar('Invalid username or password', { variant: 'error' });
-        } else if (userLoginPromise === 'fulfilled') {
+        } else if (user != null && user.promise === 'fulfilled') {
             enqueueSnackbar('Logged in successfully!', { variant: 'success' });
             navigate("/");
         }
-    }, [enqueueSnackbar, userLoginPromise, navigate])
+    }, [enqueueSnackbar, user, navigate])
 
     const formik = useFormik({
         initialValues: {
@@ -88,8 +88,8 @@ const Login = () => {
                         type="submit"
                         variant="contained"
                         color="primary"
-                        disabled={userLoginPromise==='pending'}
-                    >Login</Button>
+                        disabled={user!= null && user.promise==='pending'}
+                    >Sign In</Button>
                 </Paper>
             </Box>
         </form>

@@ -5,9 +5,9 @@ import { getUserToken } from "../../module/user/userSlice";
 
 const Auth = ({children}) => {
     const navigate = useNavigate();
-    const token = useAppSelector(getUserToken);
-    console.log('token: ', token)
-
+    const user = useAppSelector(getUserToken);
+    // console.log('token: ', token)
+    const token = user.token
     useEffect(() => {
         if (!token) {
             navigate('/login')
