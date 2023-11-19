@@ -1,6 +1,6 @@
 package net.alienzone.bookStoreApi.config;
 
-import net.alienzone.bookStoreApi.services.UserDetailService;
+import net.alienzone.bookStoreApi.services.AccountDetail;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,12 +25,12 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfigurer {
 //    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserDetailService userDetailService;
+    private final AccountDetail accountDetail;
     private final PasswordEncoder passwordEncoder;
     private final JwtRequestFilter jwtRequestFilter;
 
-    public SecurityConfigurer(UserDetailService userDetailService, PasswordEncoder passwordEncoder, JwtRequestFilter jwtRequestFilter) {
-        this.userDetailService = userDetailService;
+    public SecurityConfigurer(AccountDetail accountDetail, PasswordEncoder passwordEncoder, JwtRequestFilter jwtRequestFilter) {
+        this.accountDetail = accountDetail;
         this.passwordEncoder = passwordEncoder;
         this.jwtRequestFilter = jwtRequestFilter;
     }
@@ -38,7 +38,7 @@ public class SecurityConfigurer {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailService);
+        authProvider.setUserDetailsService(accountDetail);
         authProvider.setPasswordEncoder(passwordEncoder);
 
         return authProvider;
@@ -57,6 +57,7 @@ public class SecurityConfigurer {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/login")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/v1/register")).permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // decode the token

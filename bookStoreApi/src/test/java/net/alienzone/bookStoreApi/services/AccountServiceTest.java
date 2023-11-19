@@ -1,8 +1,8 @@
 package net.alienzone.bookStoreApi.services;
 
-import net.alienzone.bookStoreApi.dto.UserDto;
-import net.alienzone.bookStoreApi.model.User;
-import net.alienzone.bookStoreApi.repository.UserRepository;
+import net.alienzone.bookStoreApi.dto.AccountDto;
+import net.alienzone.bookStoreApi.model.Account;
+import net.alienzone.bookStoreApi.repository.AccountRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,16 +20,16 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class AccountServiceTest {
 
     @InjectMocks
-    UserService userService; // real UserService - which nedded to be tested
+    AccountService accountService; // real UserService - which nedded to be tested
 
     @Mock
     ModelMapper modelMapper; // mock
 
     @Mock
-    UserRepository userRepository;
+    AccountRepository accountRepository;
 
     @Mock
     PasswordEncoder passwordEncoder;
@@ -37,9 +37,9 @@ class UserServiceTest {
     @Test
     public void shouldReturnUserIdWhenCalledWithUserData() {
         UUID uuid = UUID.randomUUID();
-        when(userRepository.saveAndFlush(any())).thenReturn(getUser(uuid));
+        when(accountRepository.saveAndFlush(any())).thenReturn(getUser(uuid));
         when(modelMapper.map(any(), any())).thenReturn(getUser(uuid));
-        UUID newUserId = userService.createUser(getUserDto());
+        UUID newUserId = accountService.createUser(getUserDto());
 
         assertThat(newUserId).isNotNull();
         assertThat(newUserId).isEqualTo(uuid);
@@ -48,10 +48,10 @@ class UserServiceTest {
     @Test
     public void shouldReturnUserWhenCalledWithUserEmail() {
         UUID uuid = UUID.randomUUID();
-        when(userRepository.findByEmail(anyString())).thenReturn(getUser(uuid));
+        when(accountRepository.findByEmail(anyString())).thenReturn(getUser(uuid));
         when(modelMapper.map(any(), any())).thenReturn(getUserDto());
 
-        UserDto userByEmail = userService.getUserByEmail("email");
+        AccountDto userByEmail = accountService.getUserByEmail("email");
 
         assertThat(userByEmail).isNotNull();
         assertThat(userByEmail.getEmail()).isEqualTo("email");
@@ -60,14 +60,14 @@ class UserServiceTest {
     @Test
     public void shouldThrowExceptionWhenEmailNoExist() {
         UUID uuid = UUID.randomUUID();
-        when(userRepository.findByEmail(anyString())).thenThrow(new RuntimeException("error"));
+        when(accountRepository.findByEmail(anyString())).thenThrow(new RuntimeException("error"));
 
-        assertThatThrownBy(() -> userService.getUserByEmail("email")).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> accountService.getUserByEmail("email")).isInstanceOf(RuntimeException.class);
     }
 
 
-    private UserDto getUserDto() {
-        return UserDto.builder()
+    private AccountDto getUserDto() {
+        return AccountDto.builder()
                 .id(UUID.randomUUID())
                 .name("username")
                 .password("password")
@@ -75,8 +75,8 @@ class UserServiceTest {
                 .build();
     }
 
-    private User getUser(UUID uuid) {
-        return User.builder()
+    private Account getUser(UUID uuid) {
+        return Account.builder()
                 .id(uuid)
                 .name("username")
                 .password("password")

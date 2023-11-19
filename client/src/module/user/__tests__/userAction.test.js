@@ -1,5 +1,5 @@
 import React from "react";
-import { login } from "../userSlice";
+import { login, register } from "../userSlice";
 import configMockStore from 'redux-mock-store'
 import thunk from "redux-thunk";
 import axios from "axios";
@@ -34,5 +34,30 @@ describe('login Action', () => {
             token: '123456'
         })
         expect(window.localStorage.getItem('bookstore-token')).toEqual('123456')
+    })
+
+    it('should dispatch register action', async() => {
+         axios.post.mockImplementation(() => {
+           return Promise.resolve({
+             data: 'some uuid'
+           });
+         });
+        
+        
+        const store = mockStore();
+        
+        await store.dispatch(register(
+            {name: 'name', email: 'email', password: 'password' }))
+
+        const actions = store.getActions();
+        // console.log("actions: ", actions)
+
+        expect(actions.length).toEqual(2);
+        expect(actions[1].payload).toEqual({
+            id: 'some uuid',
+            name: 'name',
+            email: 'email',
+            password: 'password'
+        });
     })
 })

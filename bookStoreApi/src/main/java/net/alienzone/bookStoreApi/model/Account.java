@@ -1,7 +1,6 @@
-package net.alienzone.bookStoreApi.dto;
+package net.alienzone.bookStoreApi.model;
 
-
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,20 +8,23 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+@Entity
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+@Builder
+public class Account {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
     private UUID id;
 
-    @NotNull
+    @Column(nullable = false)
     private String name;
 
 
-    @NotNull
+    @Column(nullable = false)
     private String email;
 
-    @NotNull
+    @Column(nullable = false)
     private String password;
 }

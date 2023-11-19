@@ -6,7 +6,7 @@ export const login = createAsyncThunk('user/login', async({email, password}) => 
     try {
         console.log(" -pass: ", password, "-email: ", email);
         const response = await axios.post(`${baseUrl}/api/v1/login`, {email, password});
-        console.log("TOKEN: ", response.data)
+        // console.log("TOKEN: ", response.data)
         window.localStorage.setItem('bookstore-token', response.data.token);
         return response.data
     } catch (error) {
@@ -14,11 +14,26 @@ export const login = createAsyncThunk('user/login', async({email, password}) => 
     }
 })
 
-export const INITAL_USER_REDUCER_STATE = {
-    token: window.localStorage.getItem('bookstore-token'),
-    promise: 'uninitialized',
-    error: null
+export const register = createAsyncThunk('user/register', async({name, email, password}) => {
+    try {
+        // console.log(" -pass: ", password, "-email: ", email);
+        const response = await axios.post(`${baseUrl}/api/v1/register`, {name, email, password});
+        // console.log("UUID: ", response.data)
+        // window.localStorage.setItem('bookstore-token', response.data.token);
+        return { id: response.data, name, email, password };
+    } catch (error) {
+        throw error;
+    }
+})
 
+
+
+export const INITAL_USER_REDUCER_STATE = {
+    user: null,
+    token: window.localStorage.getItem('bookstore-token'),
+    promise: null,
+    registerPromise: null,
+    error: null
 }
 
 const userSlice = createSlice({
@@ -35,6 +50,17 @@ const userSlice = createSlice({
         });
         builder.addCase(login.rejected, (state, action) => {
             state.promise = 'failed';
+            state.error = action.error.message;
+        });
+        builder.addCase(register.pending, (state, action) => {
+            state.registerPromise = "pending";
+        });
+        builder.addCase(register.fulfilled, (state, action) => {
+            state.user = action.payload
+            state.registerPromise = "fulfilled";
+        });
+        builder.addCase(register.rejected, (state, action) => {
+            state.registerPromise = "failed";
             state.error = action.error.message;
         });
     }
