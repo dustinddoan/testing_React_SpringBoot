@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DataJpaTest
 public class BookControllerTest {
 
     @InjectMocks
@@ -40,7 +42,9 @@ public class BookControllerTest {
         assertThat(bookDtoResponse.getBody().size()).isEqualTo(1);
 
 
-    } @Test
+    }
+
+    @Test
     void shouldReturnBookDtoListWhenGetBookByTitleCall() {
         List<BookDto> bookDtoList = new ArrayList<BookDto>();
         BookDto bookDto = getBookDto();
