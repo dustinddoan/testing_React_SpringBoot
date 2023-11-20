@@ -31,7 +31,6 @@ describe('Login', () => {
         fireEvent.submit(submitBtn);
         expect(await screen.findByText('Username is required')).toBeInTheDocument();
         expect(await screen.findByText('Password is required')).toBeInTheDocument();
-        expect(1).toEqual(1);
     })
 
     it('should show email and password invalid error message', async() => {

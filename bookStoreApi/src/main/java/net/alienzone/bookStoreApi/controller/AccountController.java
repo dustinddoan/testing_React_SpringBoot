@@ -38,6 +38,7 @@ public class AccountController {
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         try {
             log.info("---DUSTIN: {}", request.getEmail());
+            log.info("---DUSTIN: {}", request.getPassword());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         } catch (BadCredentialsException exception) {
             log.error("Exception during authentication: {}", exception.getMessage());
